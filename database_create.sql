@@ -1,7 +1,7 @@
 -- SQLite schema
 -- Database file: database/prediction_market.db
 -- trading_date -> market_hour -> observation
--- observation -> crypto_price + order_book_state -> order_book_level
+-- observation -> crypto_price + order_book_state
 
 PRAGMA foreign_keys = ON;
 
@@ -96,24 +96,6 @@ CREATE TABLE IF NOT EXISTS order_book_state (
     )
 );
 
-CREATE TABLE IF NOT EXISTS order_book_level (
-    order_book_level_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_book_state_id INTEGER NOT NULL
-        REFERENCES order_book_state(order_book_state_id)
-        ON DELETE CASCADE,
-
-    side TEXT NOT NULL,
-    price NUMERIC NOT NULL,
-    quantity NUMERIC NOT NULL,
-
-    CHECK (side IN ('bid', 'ask')),
-    CHECK (price >= 0),
-    CHECK (quantity >= 0),
-
-    -- A price can occur only once per side in one order-book snapshot.
-    UNIQUE (order_book_state_id, side, price)
-);
-
 CREATE INDEX IF NOT EXISTS idx_market_hour_date
     ON market_hour (trading_date_id, hour_start);
 
@@ -122,8 +104,5 @@ CREATE INDEX IF NOT EXISTS idx_observation_hour_time
 
 CREATE INDEX IF NOT EXISTS idx_order_book_state_observation
     ON order_book_state (observation_id);
-
-CREATE INDEX IF NOT EXISTS idx_order_book_level_state_side_price
-    ON order_book_level (order_book_state_id, side, price);
 
 COMMIT;

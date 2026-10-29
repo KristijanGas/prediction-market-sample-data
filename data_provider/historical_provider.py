@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import json
 from zoneinfo import ZoneInfo
-import numpy as np
 
 class historical_provider:
     def __init__(self, metadata):
