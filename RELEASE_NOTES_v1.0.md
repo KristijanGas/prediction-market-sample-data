@@ -12,6 +12,7 @@ dataset.
 - CSV and JSON dataset exports
 - Import, cleanup, and export scripts
 - Dataset metadata and CC0 1.0 licensing information
+- Data gathering support
 
 ## Scope
 
