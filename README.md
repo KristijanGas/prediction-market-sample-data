@@ -26,6 +26,7 @@ machine-readable CSV and JSON files.
 - **Cryptocurrency price source:** Binance BTCUSDT
 - **Database format:** SQLite
 - **Export formats:** CSV and JSON
+- **JSON Schema:** `schema.json`
 - **Sampling interval:** Approximately one observation per second
 - **Covered period:** 5 July 2026, 05:00–13:00 UTC
 - **Market outcomes:** `Up` and `Down`
@@ -73,6 +74,22 @@ The export contains one `database.json` file, one CSV file for each database
 table, and normalized `all.csv` and `all.json` snapshot files. The snapshot
 files contain one record per order-book state, without repeating hourly JSON
 metadata on every row.
+
+## Web interface
+
+The Django server reads table data directly from
+`database/prediction_market.db`. It does not use the CSV or JSON exports for
+the HTML table.
+
+Start the server from the repository root:
+
+```bash
+.venv/bin/python backend/server.py
+```
+
+Open `http://127.0.0.1:8000/` for the dataset description. The `/datatable/`
+page supports filtering by UTC time range, market hour, and outcome, and
+provides CSV and JSON downloads for the current filter.
 
 ## Release v1.0
 

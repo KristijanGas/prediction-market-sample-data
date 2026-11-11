@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tablični prikaz podataka</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 2rem; color: #1f2937; }
+        form { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin-bottom: 1rem; }
+        label { display: flex; flex-direction: column; gap: .25rem; }
+        input, select, button { padding: .4rem; }
+        .downloads { margin: 1rem 0; }
+        .table-wrapper { overflow-x: auto; }
+        table { border-collapse: collapse; min-width: 1200px; }
+        th, td { border: 1px solid #d1d5db; padding: .4rem .6rem; text-align: left; white-space: nowrap; }
+        th { background: #f3f4f6; }
+        #status { min-height: 1.5rem; }
+    </style>
+</head>
+<body>
+    <main>
+        <p><a href="/">← Home page</a></p>
+        <h1>Polymarket BTC hourly data</h1>
+        <p>
+            This page provides a tabular view of the Polymarket hourly Bitcoin
+            prediction markets dataset. You can filter the data by date range,
+            market hour, and outcome, and download the filtered data in CSV or
+            JSON format.
+        </p>
+
+        <form id="filters">
+            <label>
+                From (UTC)
+                <input id="start" name="start" type="datetime-local" step="1">
+            </label>
+            <label>
+                To (UTC)
+                <input id="end" name="end" type="datetime-local" step="1">
+            </label>
+            <label>
+                Outcome
+                <select id="outcome" name="outcome">
+                    <option value="">Both</option>
+                    <option value="Up">Up</option>
+                    <option value="Down">Down</option>
+                </select>
+            </label>
+            <label>
+                Market-hour
+                <select id="market_hour_id" name="market_hour_id">
+                    <option value="">All hours</option>
+                    <option value="1">1 (05:00-06:00 UTC)</option>
+                    <option value="2">2 (06:00-07:00 UTC)</option>
+                    <option value="3">3 (07:00-08:00 UTC)</option>
+                    <option value="4">4 (08:00-09:00 UTC)</option>
+                    <option value="5">5 (09:00-10:00 UTC)</option>
+                    <option value="6">6 (10:00-11:00 UTC)</option>
+                    <option value="7">7 (11:00-12:00 UTC)</option>
+                    <option value="8">8 (12:00-13:00 UTC)</option>
+                </select>
+            </label>
+            <button type="submit">Apply filter</button>
+        </form>
+
+        <p id="status" role="status"></p>
+        <p class="downloads">
+            Download filtered data in:
+            <a id="csv-download" href="/api/data.csv">CSV</a> |
+            <a id="json-download" href="/api/data.json">JSON</a>
+        </p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead><tr id="table-head"></tr></thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        const columns = [
+            ["calendar_date", "Date"], ["market_hour_id", "Market-hour"],
+            ["hour_start", "Hour begin"], ["hour_end", "Hour end"],
+            ["observation_id", "Observation"], ["observed_at", "Timestamp"],
+            ["outcome", "Outcome"], ["price_symbol", "Symbol"],
+            ["price", "BTC price"], ["best_bid", "Best bid"],
+            ["best_ask", "Best ask"]
+        ];
+        const form = document.querySelector("#filters");
+        const status = document.querySelector("#status");
+        const tableHead = document.querySelector("#table-head");
+        const tableBody = document.querySelector("#table-body");
+
+        function queryString() {
+            const params = new URLSearchParams();
+            for (const [name, value] of new FormData(form)) {
+                if (value) {
+                    params.set(name, name === "start" || name === "end"
+                        ? `${value}${value.length === 16 ? ":00" : ""}Z`
+                        : value);
+                }
+            }
+            return params;
+        }
+
+        function setDownloadLinks(params) {
+            const query = params.toString();
+            document.querySelector("#csv-download").href = `/api/data.csv?${query}`;
+            document.querySelector("#json-download").href = `/api/data.json?${query}`;
+        }
+
+        async function loadData(event) {
+            if (event) event.preventDefault();
+            const params = queryString();
+            setDownloadLinks(params);
+            status.textContent = "Loading data...";
+            tableHead.replaceChildren();
+            tableBody.replaceChildren();
+            try {
+                const response = await fetch(`/api/data/?${params}`);
+                const payload = await response.json();
+                if (!response.ok) throw new Error(payload.error || "Fetch error");
+                for (const [, heading] of columns) {
+                    const cell = document.createElement("th");
+                    cell.textContent = heading;
+                    tableHead.appendChild(cell);
+                }
+                for (const record of payload.records) {
+                    const row = document.createElement("tr");
+                    for (const [key] of columns) {
+                        const cell = document.createElement("td");
+                        cell.textContent = record[key] ?? "";
+                        row.appendChild(cell);
+                    }
+                    tableBody.appendChild(row);
+                }
+                status.textContent = `Showing ${payload.count} results.`;
+            } 
+            catch (error) {
+                status.textContent = error.message;
+            }
+        }
+
+        form.addEventListener("submit", loadData);
+        loadData();
+    </script>
+</body>
+</html>

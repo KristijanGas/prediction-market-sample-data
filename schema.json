@@ -1,0 +1,142 @@
+{
+  "$id": "https://or.fer.unizg.hr/prediction-market-sample-data/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Polymarket hourly Bitcoin prediction markets",
+  "description": "A record from the hourly Polymarket Bitcoin prediction-market dataset, combining market observations, Binance BTCUSDT prices, and best bid and ask order-book prices.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "title": "Bitcoin prediction-market observation",
+    "description": "One order-book state for one Polymarket asset at an observation time.",
+    "required": [
+      "trading_date_id",
+      "calendar_date",
+      "market_hour_id",
+      "hour_start",
+      "hour_end",
+      "asset_id",
+      "token_id",
+      "outcome",
+      "observation_id",
+      "observed_at",
+      "price_symbol",
+      "price",
+      "price_source",
+      "order_book_state_id",
+      "best_bid",
+      "best_ask",
+      "bid_levels",
+      "ask_levels"
+    ],
+    "properties": {
+      "trading_date_id": {
+        "type": "integer",
+        "title": "Trading date ID",
+        "description": "Identifier of the trading date.",
+        "minimum": 1
+      },
+      "calendar_date": {
+        "type": "string",
+        "title": "Calendar date",
+        "description": "Trading date in ISO 8601 date format.",
+        "format": "date"
+      },
+      "market_hour_id": {
+        "type": "integer",
+        "title": "Market hour ID",
+        "description": "Identifier of the hourly prediction market.",
+        "minimum": 1
+      },
+      "hour_start": {
+        "type": "string",
+        "title": "Hour start",
+        "description": "Start of the market hour in UTC.",
+        "format": "date-time"
+      },
+      "hour_end": {
+        "type": "string",
+        "title": "Hour end",
+        "description": "End of the market hour in UTC.",
+        "format": "date-time"
+      },
+      "asset_id": {
+        "type": "integer",
+        "title": "Asset ID",
+        "description": "Identifier of the Polymarket asset.",
+        "minimum": 1
+      },
+      "token_id": {
+        "type": "string",
+        "title": "Token ID",
+        "description": "Polymarket CLOB token identifier.",
+        "minLength": 1
+      },
+      "outcome": {
+        "type": "string",
+        "title": "Outcome",
+        "description": "Prediction-market outcome.",
+        "enum": ["Up", "Down"]
+      },
+      "observation_id": {
+        "type": "integer",
+        "title": "Observation ID",
+        "description": "Identifier of the observation.",
+        "minimum": 1
+      },
+      "observed_at": {
+        "type": "string",
+        "title": "Observed at",
+        "description": "Observation timestamp in UTC.",
+        "format": "date-time"
+      },
+      "price_symbol": {
+        "type": "string",
+        "title": "Price symbol",
+        "description": "Cryptocurrency price symbol.",
+        "const": "BTCUSDT"
+      },
+      "price": {
+        "type": "number",
+        "title": "Price",
+        "description": "BTCUSDT price provided by the configured price source.",
+        "minimum": 0
+      },
+      "price_source": {
+        "type": "string",
+        "title": "Price source",
+        "description": "Source of the cryptocurrency price.",
+        "const": "binance"
+      },
+      "order_book_state_id": {
+        "type": "integer",
+        "title": "Order-book state ID",
+        "description": "Identifier of the order-book snapshot.",
+        "minimum": 1
+      },
+      "best_bid": {
+        "type": ["number", "null"],
+        "title": "Best bid",
+        "description": "Best available bid price, or null when unavailable.",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "best_ask": {
+        "type": ["number", "null"],
+        "title": "Best ask",
+        "description": "Best available ask price, or null when unavailable.",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "bid_levels": {
+        "type": ["array", "null"],
+        "title": "Bid levels",
+        "description": "Detailed bid levels. This release stores null because individual levels are not included."
+      },
+      "ask_levels": {
+        "type": ["array", "null"],
+        "title": "Ask levels",
+        "description": "Detailed ask levels. This release stores null because individual levels are not included."
+      }
+    }
+  }
+}

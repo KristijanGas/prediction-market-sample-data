@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Polymarket hourly Bitcoin prediction markets</title>
+    <meta name="description"
+          content="A free-to-use sample dataset of hourly Bitcoin Up or Down prediction markets from Polymarket, combined with Binance BTCUSDT prices and order-book observations.">
+    <meta name="author" content="KristijanGas">
+</head>
+<body>
+    <main>
+        <h1>Polymarket hourly Bitcoin prediction markets</h1>
+        <p>
+            This page describes a free-to-use sample dataset of hourly Bitcoin
+            “Up or Down” prediction markets from Polymarket. The dataset
+            combines Polymarket market metadata and order-book observations
+            with BTCUSDT prices from Binance.
+        </p>
+
+        <h2>Dataset metadata</h2>
+        <ul>
+            <li>Dataset name: Polymarket hourly Bitcoin prediction markets</li>
+            <li>Version: 1.0</li>
+            <li>Author: KristijanGas</li>
+            <li>License: CC0 1.0 Universal</li>
+            <li>Data type: time-series and prediction-market data</li>
+            <li>Covered period: 5 July 2026, 05:00-13:00 UTC</li>
+            <li>Market outcomes: <code>Up</code> and <code>Down</code></li>
+            <li>Sampling interval: approximately one observation per second</li>
+        </ul>
+
+        <h2>Dataset contents</h2>
+        <p>
+            Each record contains the trading date, hourly market interval,
+            Polymarket asset and outcome, observation timestamp, BTCUSDT
+            price, and the best bid and ask prices. Individual order-book
+            levels and quantities are not included.
+        </p>
+
+        <h2>Machine-readable data</h2>
+        <p>
+            The dataset is available in
+            <a href="/data/all.csv">CSV</a> and
+            <a href="/data/all.json">JSON</a> formats. The structure of the
+            JSON data is described by
+            <a href="/schema.json">schema.json</a>.
+        </p>
+
+        <p><a href="/datatable/">Open the table view and filter the data</a></p>
+    </main>
+</body>
+</html>
