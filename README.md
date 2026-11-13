@@ -91,16 +91,26 @@ Open `http://127.0.0.1:8000/` for the dataset description. The `/datatable/`
 page supports filtering by UTC time range, market hour, and outcome, and
 provides CSV and JSON downloads for the current filter.
 
-## Release v1.0
+# Release v2.0
 
-Release v1.0 contains:
+## Included
 
-- this dataset description and metadata
-- the CC0 1.0 license
-- the normalized SQLite schema
-- the SQLite database dump
-- the CSV and JSON dataset exports
-- scripts for importing, cleaning, and exporting the database
+- Django server with a human-readable dataset landing page
+- Dataset description and metadata in `frontend/index.html`
+- HTML table view in `frontend/datatable.html`
+- AJAX data loading from the SQLite database
+- Filtering by UTC time range, market hour, and market outcome
+- Support for time ranges within one market hour and across multiple market hours
+- CSV and JSON downloads of the currently filtered table view
+- JSON Schema metadata in `schema.json`
+- A public `/schema.json` endpoint describing the JSON data structure
+- Direct database-backed data access for the table and filtered downloads
+- Existing hourly Polymarket Bitcoin market data
+- Existing BTCUSDT price and best bid/best ask order-book observations
+- Existing normalized SQLite database, exports, and data-processing scripts
+- Dataset metadata and CC0 1.0 licensing information
 
-- **Release name:** `Release v1.0`
-- **Git tag:** `v1.0`
+## GitHub release information
+
+- **Release name:** `Release v2.0`
+- **Tag:** `v2.0`
